@@ -1,0 +1,86 @@
+<%- include("partials/header.ejs") %>
+<!-- Create the website below -->
+<div class="container-fluid first-container mt-5 px-0">
+    <div class="row mt-4 ps-5 pb-0 align-items-center rounded-3 border shadow-lg h-100">
+        <div class="col-lg-7">
+            <h1 class="display-4 pb-5 fw-bold lh-1 text-body-emphasis">Cat</h1>
+            <p class="lead">A small blogpost with pictures of my day to day life for record.</p>
+        </div>
+        <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg h-100">
+            <img class="img-fluid h-100 w-100 rounded-lg-3" src="/images/cat3.jpeg" alt="Image of myself">
+        </div>
+    </div>
+</div>
+
+<div class="album pb-5 bg-body-tertiary w-100">
+    <div class="container">
+        <div class="container mt-0 w-100">
+            <h1 class="mb-5 mt-5 blog-title">I think I like this little life</h1>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5">
+                <!-- Loop through the posts and display them -->
+                <% posts.forEach(post => { %>
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img src="<%= post.imagePath %>" class="card-img-top" alt="Image for post">
+                        <div class="card-body">
+                            <!-- Highlight search term in description -->
+                            <p class="card-text">
+                                <% if (searchQuery) { %>
+                                    <%- post.description.replace(
+                                        new RegExp(searchQuery, 'gi'),
+                                        function(match) {
+                                            return `<mark>${match}</mark>`;
+                                        }
+                                    ) %>
+                                <% } else { %>
+                                    <%- post.description %>
+                                <% } %>
+                            </p>
+
+                            <!-- Date -->
+                            <small class="text-muted">
+                                <%= new Date(post.createdAt).toLocaleDateString('en-GB', {
+                                    weekday: 'long', // Full weekday name
+                                    year: 'numeric', // Full year
+                                    month: 'long', // Full month name
+                                    day: 'numeric' // Day of the month
+                                }) %>
+                            </small>
+
+                            <!-- Buttons -->
+                            <div class="d-flex justify-content-center mt-2">
+                                <!-- View Button -->
+                                <button type="button" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#viewModal-<%= post.id %>">
+                                    View
+                                </button>
+                                <!-- Delete Button -->
+                                <form action="/delete/<%= post.id %>?_method=DELETE" method="POST" onsubmit="return confirmDelete()">
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+                    <div class="modal fade" id="viewModal-<%= post.id %>" tabindex="-1" aria-labelledby="viewModalLabel-<%= post.id %>" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="viewModalLabel-<%= post.id %>"><%- post.description %></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <img src="<%= post.imagePath %>" class="img-fluid" style="max-height: 80vh; width: auto; display: block; margin: 0 auto;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Footer -->
+<%- include("partials/footer.ejs") %>

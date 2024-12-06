@@ -1,0 +1,27 @@
+<%- include("partials/header.ejs") %>
+
+<style>
+    body {
+      background-image: url('/images/fundo.jpeg'); /* Replace with the actual path to your image */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed; /* Optional for parallax effect */
+      background-repeat: no-repeat;
+    }
+  </style>
+
+<form id="blog-post" action="/upload" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="image" class="form-label">Choose an image</label>
+      <input type="file" class="form-control" id="image" name="image" required>
+    </div>
+    
+    <div class="mb-3">
+      <label for="description" class="form-label">Brief description</label>
+      <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+    </div>
+  
+    <button type="submit" class="btn btn-secondary">Submit</button>
+  </form>
+
+<%- include("partials/footer.ejs") %>
